@@ -2,11 +2,11 @@
 import { Routes } from '@angular/router';
 
 // Loja virtual
-import { CatalogoComponent } from './pages/loja/catalogo/catalogo.component';
-import { CadastroClienteComponent } from './pages/loja/cadastro-cliente/cadastro-cliente.component';
-import { CarrinhoComponent } from './pages/loja/carrinho/carrinho.component';
-import { MeusPedidosComponent } from './pages/loja/meus-pedidos/meus-pedidos.component';
-import { DetalhesPedidoComponent } from './pages/loja/detalhes-pedido/detalhes-pedido.component';
+import { CatalogoComponent } from 'loja/catalogo/catalogo.component';
+import { CadastroClienteComponent } from 'loja/cadastro-cliente/cadastro-cliente.component';
+import { CarrinhoComponent } from 'loja/carrinho/carrinho.component';
+import { MeusPedidosComponent } from 'loja/meus-pedidos/meus-pedidos.component';
+import { DetalhesPedidoComponent } from '.loja/detalhes-pedido/detalhes-pedido.component';
 
 // Painel administrativo
 import { DashboardComponent } from 'admin/dashboard/dashboard.component';
