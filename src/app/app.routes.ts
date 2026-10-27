@@ -2,42 +2,41 @@
 import { Routes } from '@angular/router';
 
 // Loja virtual
-import { CatalogoComponent } from 'loja/catalogo/catalogo.component';
-import { CadastroClienteComponent } from 'loja/cadastro-cliente/cadastro-cliente.component';
-import { CarrinhoComponent } from 'loja/carrinho/carrinho.component';
-import { MeusPedidosComponent } from 'loja/meus-pedidos/meus-pedidos.component';
-import { DetalhesPedidoComponent } from '.loja/detalhes-pedido/detalhes-pedido.component';
+import { Catalogo } from './loja/catalogo/catalogo';
+import { CadastroCliente } from './loja/cadastro-cliente/cadastro-cliente';
+import { Carrinho } from './loja/carrinho/carrinho';
+import { MeusPedidos } from './loja/meus-pedidos/meus-pedidos';
+import { DetalhesPedidos } from './loja/detalhes-pedidos/detalhes-pedidos';
 
 // Painel administrativo
-import { DashboardComponent } from 'admin/dashboard/dashboard.component';
-import { ClientesComponent } from 'admin/clientes/clientes.component';
-import { ProdutosComponent } from 'admin/produtos/produtos.component';
-import { ServicosComponent } from 'admin/servicos/servicos.component';
-import { CategoriasComponent } from 'admin/categorias/categorias.component';
-import { FuncionariosComponent } from 'admin/funcionarios/funcionarios.component';
-import { PedidosComponent } from 'admin/pedidos/pedidos.component';
-import { EstoqueComponent } from 'admin/estoque/estoque.component';
-import { EntradasProdutosComponent } from 'admin/entradas-produtos/entradas-produtos.component';
+import { Dashboard } from './admin/dashboard/dashboard';
+import { Clientes } from './admin/clientes/clientes';
+import { Produtos } from './admin/produtos/produtos';
+import { Servicoes } from './admin/servicoes/servicoes';
+import { Categorias } from './admin/categorias/categorias';
+import { Funcionarios } from './admin/funcionarios/funcionarios';
+import { Pedidos } from './admin/pedidos/pedidos';
+import { Estoque } from './admin/estoque/estoque';
+import { EntradasProdutos } from './admin/entradas-produtos/entradas-produtos';
 
 export const routes: Routes = [
   // Loja virtual
-  { path: '', component: CatalogoComponent },
-  { path: 'cadastro-cliente', component: CadastroClienteComponent },
-  { path: 'carrinho', component: CarrinhoComponent },
-  { path: 'meus-pedidos', component: MeusPedidosComponent },
-  { path: 'pedidos/:id', component: DetalhesPedidoComponent },
+  { path: '', component: Catalogo },
+  { path: 'cadastro-cliente', component: CadastroCliente },
+  { path: 'carrinho', component: Carrinho },
+  { path: 'meus-pedidos', component: MeusPedidos },
+  { path: 'pedidos/:id', component: DetalhesPedidos },
 
   // Painel administrativo
-  { path: 'admin', component: DashboardComponent },
-  { path: 'admin/clientes', component: ClientesComponent },
-  { path: 'admin/produtos', component: ProdutosComponent },
-  { path: 'admin/servicos', component: ServicosComponent },
-  { path: 'admin/categorias', component: CategoriasComponent },
-  { path: 'admin/funcionarios', component: FuncionariosComponent },
-  { path: 'admin/pedidos', component: PedidosComponent },
-  { path: 'admin/estoque', component: EstoqueComponent },
-  { path: 'admin/entradas-produtos', component: EntradasProdutosComponent },
+  { path: 'admin', component: Dashboard },
+  { path: 'admin/clientes', component: Clientes },
+  { path: 'admin/produtos', component: Produtos },
+  { path: 'admin/servicos', component: Servicoes },
+  { path: 'admin/categorias', component: Categorias },
+  { path: 'admin/funcionarios', component: Funcionarios },
+  { path: 'admin/pedidos', component: Pedidos },
+  { path: 'admin/estoque', component: Estoque },
+  { path: 'admin/entradas-produtos', component: EntradasProdutos },
 
-  // Redirecionamento de caminhos desconhecidos
   { path: '**', redirectTo: '' }
 ];
