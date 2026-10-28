@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 
 // Loja virtual
@@ -18,14 +17,18 @@ import { Funcionarios } from './admin/funcionarios/funcionarios';
 import { Pedidos } from './admin/pedidos/pedidos';
 import { Estoque } from './admin/estoque/estoque';
 import { EntradasProdutos } from './admin/entradas-produtos/entradas-produtos';
+import { Atendimentos } from './admin/atendimentos/atendimentos';
+import { AtendimentosItens } from './admin/atendimentos-itens/atendimentos-itens';
 
 export const routes: Routes = [
   // Loja virtual
-  { path: '', component: Catalogo },
+  { path: '', redirectTo: 'admin', pathMatch: 'full' },
   { path: 'cadastro-cliente', component: CadastroCliente },
   { path: 'carrinho', component: Carrinho },
   { path: 'meus-pedidos', component: MeusPedidos },
   { path: 'pedidos/:id', component: DetalhesPedidos },
+  { path: 'admin/atendimentos', component: Atendimentos },
+  { path: 'admin/atendimentos-itens', component: AtendimentosItens },
 
   // Painel administrativo
   { path: 'admin', component: Dashboard },
@@ -38,5 +41,5 @@ export const routes: Routes = [
   { path: 'admin/estoque', component: Estoque },
   { path: 'admin/entradas-produtos', component: EntradasProdutos },
 
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];

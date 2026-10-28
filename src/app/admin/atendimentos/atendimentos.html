@@ -1,0 +1,123 @@
+
+<main class="pagina">
+    <header class="cabecalho">
+      <div>
+        <h1>Gerenciamento de Atendimentos</h1>
+        <p>Cadastre, consulte e gerencie os atendimentos.</p>
+      </div>
+    </header>
+  
+    <section class="painel">
+      <h2>{{ editando ? 'Editar atendimento' : 'Novo atendimento' }}</h2>
+  
+      <form (ngSubmit)="salvar()">
+        <div class="campos">
+          <div class="campo">
+            <label for="idpessoa">ID da pessoa</label>
+            <input
+              id="idpessoa"
+              type="number"
+              name="idpessoa"
+              [(ngModel)]="formulario.idpessoa"
+              min="1"
+              required
+            />
+          </div>
+  
+          <div class="campo">
+            <label for="dataAtendimento">Data do atendimento</label>
+            <input
+              id="dataAtendimento"
+              type="date"
+              name="dataAtendimento"
+              [(ngModel)]="formulario.dataAtendimento"
+              required
+            />
+          </div>
+  
+          <div class="campo">
+            <label for="statusAtendimento">Status</label>
+            <select
+              id="statusAtendimento"
+              name="statusAtendimento"
+              [(ngModel)]="formulario.statusAtendimento"
+              required
+            >
+              <option value="Aberto">Aberto</option>
+              <option value="Em andamento">Em andamento</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="acoes">
+          <button type="submit" class="botao primario">
+            {{ editando ? 'Salvar alterações' : 'Cadastrar atendimento' }}
+          </button>
+  
+          <button
+            *ngIf="editando"
+            type="button"
+            class="botao secundario"
+            (click)="cancelarEdicao()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+  
+    <p *ngIf="mensagem" class="mensagem sucesso">{{ mensagem }}</p>
+    <p *ngIf="erro" class="mensagem erro">{{ erro }}</p>
+    <p *ngIf="carregando">Carregando atendimentos...</p>
+  
+    <section class="painel">
+      <h2>Atendimentos cadastrados</h2>
+  
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ID da pessoa</th>
+              <th>Data</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            <tr *ngFor="let atendimento of atendimentos">
+              <td>{{ atendimento.idatendimento }}</td>
+              <td>{{ atendimento.idpessoa }}</td>
+              <td>{{ atendimento.dataAtendimento | date:'dd/MM/yyyy' }}</td>
+              <td>{{ atendimento.statusAtendimento }}</td>
+              <td class="acoes-tabela">
+                <button
+                  type="button"
+                  class="botao editar"
+                  (click)="editar(atendimento)"
+                >
+                  Editar
+                </button>
+  
+                <button
+                  type="button"
+                  class="botao excluir"
+                  (click)="excluir(atendimento)"
+                >
+                  Excluir
+                </button>
+              </td>
+            </tr>
+  
+            <tr *ngIf="!carregando && atendimentos.length === 0">
+              <td colspan="5">Nenhum atendimento encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  
