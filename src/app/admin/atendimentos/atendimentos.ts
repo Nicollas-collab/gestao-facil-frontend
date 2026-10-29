@@ -90,13 +90,10 @@ export class Atendimentos implements OnInit {
     } else {
       this.atendimentoService.cadastrar(dados).subscribe({
         next: () => {
-          this.mensagem = 'Atendimento cadastrado com sucesso!';
-          this.formulario = this.novoAtendimento();
           this.listarAtendimentos();
         },
         error: (erro) => {
           console.error('Erro ao cadastrar atendimento:', erro);
-          this.erro = erro.error?.mensagem || 'Não foi possível cadastrar o atendimento. Confira se o ID da pessoa existe.';
         }
       });
     }
