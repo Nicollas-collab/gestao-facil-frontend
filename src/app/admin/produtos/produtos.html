@@ -1,1 +1,66 @@
-<p>produtos works!</p>
+<div class="pagina-produtos">
+  <header class="cabecalho">
+    <h1>Gerenciamento de Produtos e Serviços</h1>
+    <p>Consulte os produtos e serviços cadastrados.</p>
+  </header>
+
+  <section class="painel">
+    <h2>Produtos e serviços cadastrados</h2>
+
+    <p *ngIf="carregando">Carregando itens...</p>
+
+    <p *ngIf="erro">{{ erro }}</p>
+
+    <p *ngIf="!carregando && !erro && itens.length === 0">Nenhum produto ou serviço cadastrado.</p>
+
+    <div class="tabela-container" *ngIf="itens.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Tipo</th>
+            <th>Preço</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of itens">
+            <td>{{ item.item1 }}</td>
+
+            <td>
+              {{ item.categoria || item.idcategoria }}
+            </td>
+
+            <td>
+              {{
+                item.tipoItem === 'P'
+                  ? 'Produto'
+                  : item.tipoItem === 'S'
+                    ? 'Serviço'
+                    : item.tipoItem
+              }}
+            </td>
+
+            <td>
+              {{ item.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </td>
+
+            <td>
+              {{
+                item.ativoProdutoServico === 'S'
+                  ? 'Ativo'
+                  : item.ativoProdutoServico === 'N'
+                    ? 'Inativo'
+                    : item.ativoProdutoServico
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button type="button" (click)="listarItens()">Atualizar lista</button>
+  </section>
+</div>
