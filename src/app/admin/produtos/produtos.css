@@ -1,74 +1,73 @@
-.pagina-produtos {
-  padding: 24px;
-}
 
-.cabecalho {
-  margin-bottom: 24px;
-}
-
-.cabecalho h1 {
-  margin-bottom: 8px;
-}
-
-.cabecalho p {
-  color: #666;
-}
-
-.painel {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-.painel h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.campo input,
-.campo select,
-.campo textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font: inherit;
-}
-
-.campo textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
-form button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 6px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
-  font: inherit;
-}
-
-@media (max-width: 650px) {
-  form {
-    grid-template-columns: 1fr;
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
   }
-
-  .pagina-produtos {
-    padding: 14px;
+  
+  .campo-completo {
+    grid-column: 1 / -1;
   }
-}
+  
+  .campo label {
+    font-weight: 600;
+  }
+  
+  .campo small {
+    color: #666;
+  }
+  
+  .acoes-formulario,
+  .acoes-tabela {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .acoes-formulario {
+    margin-top: 20px;
+  }
+  
+  .mensagem-sucesso {
+    color: #166534;
+    background: #dcfce7;
+    padding: 10px;
+    border-radius: 6px;
+  }
+  
+  .mensagem-erro {
+    color: #991b1b;
+    background: #fee2e2;
+    padding: 10px;
+    border-radius: 6px;
+  }
+  
+  .botao-secundario {
+    background: #64748b;
+    color: white;
+  }
+  
+  .botao-excluir {
+    background: #b91c1c;
+    color: white;
+  }
+  
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .tabela-container {
+    overflow-x: auto;
+  }
+  
+  @media (max-width: 650px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .campo-completo {
+      grid-column: auto;
+    }
+  }
+  

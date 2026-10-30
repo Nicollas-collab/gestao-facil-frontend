@@ -1,66 +1,196 @@
+
 <div class="pagina-produtos">
-  <header class="cabecalho">
-    <h1>Gerenciamento de Produtos e Serviços</h1>
-    <p>Consulte os produtos e serviços cadastrados.</p>
-  </header>
-
-  <section class="painel">
-    <h2>Produtos e serviços cadastrados</h2>
-
-    <p *ngIf="carregando">Carregando itens...</p>
-
-    <p *ngIf="erro">{{ erro }}</p>
-
-    <p *ngIf="!carregando && !erro && itens.length === 0">Nenhum produto ou serviço cadastrado.</p>
-
-    <div class="tabela-container" *ngIf="itens.length > 0">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Tipo</th>
-            <th>Preço</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr *ngFor="let item of itens">
-            <td>{{ item.item1 }}</td>
-
-            <td>
-              {{ item.categoria || item.idcategoria }}
-            </td>
-
-            <td>
-              {{
-                item.tipoItem === 'P'
-                  ? 'Produto'
-                  : item.tipoItem === 'S'
-                    ? 'Serviço'
-                    : item.tipoItem
-              }}
-            </td>
-
-            <td>
-              {{ item.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-            </td>
-
-            <td>
-              {{
-                item.ativoProdutoServico === 'S'
-                  ? 'Ativo'
-                  : item.ativoProdutoServico === 'N'
-                    ? 'Inativo'
-                    : item.ativoProdutoServico
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <button type="button" (click)="listarItens()">Atualizar lista</button>
-  </section>
-</div>
+    <header class="cabecalho">
+      <h1>Gerenciamento de Produtos e Serviços</h1>
+      <p>Cadastre e gerencie os produtos e serviços disponíveis.</p>
+    </header>
+  
+    <section class="painel">
+      <h2>{{ editandoId === null ? 'Cadastrar item' : 'Editar item' }}</h2>
+  
+      <p *ngIf="mensagem" role="status" class="mensagem-sucesso">
+        {{ mensagem }}
+      </p>
+  
+      <p *ngIf="erro" role="alert" class="mensagem-erro">
+        {{ erro }}
+      </p>
+  
+      <form (ngSubmit)="salvar()" #formItem="ngForm">
+        <div class="form-grid">
+          <div class="campo">
+            <label for="item1">Nome</label>
+            <input
+              id="item1"
+              name="item1"
+              type="text"
+              [(ngModel)]="formulario.item1"
+              maxlength="40"
+              required
+            />
+          </div>
+  
+          <div class="campo">
+            <label for="idcategoria">Categoria</label>
+            <select
+              id="idcategoria"
+              name="idcategoria"
+              [(ngModel)]="formulario.idcategoria"
+              required
+            >
+              <option [ngValue]="0" disabled>Selecione uma categoria</option>
+              <option
+                *ngFor="let categoria of categorias"
+                [ngValue]="categoria.idcategoria"
+              >
+                {{ categoria.categoria }}
+              </option>
+            </select>
+  
+            <small *ngIf="categorias.length === 0">
+              Nenhuma categoria carregada. Verifique se existem categorias cadastradas.
+            </small>
+          </div>
+  
+          <div class="campo campo-completo">
+            <label for="descricaoItem">Descrição</label>
+            <textarea
+              id="descricaoItem"
+              name="descricaoItem"
+              [(ngModel)]="formulario.descricaoItem"
+              maxlength="200"
+              required
+            ></textarea>
+          </div>
+  
+          <div class="campo">
+            <label for="tipoItem">Tipo</label>
+            <select
+              id="tipoItem"
+              name="tipoItem"
+              [(ngModel)]="formulario.tipoItem"
+              required
+            >
+              <option value="" disabled>Selecione</option>
+              <option value="P">Produto</option>
+              <option value="S">Serviço</option>
+            </select>
+          </div>
+  
+          <div class="campo">
+            <label for="preco">Preço (R$)</label>
+            <input
+              id="preco"
+              name="preco"
+              type="number"
+              [(ngModel)]="formulario.preco"
+              min="0"
+              max="99999999.99"
+              step="0.01"
+              required
+            />
+          </div>
+  
+          <div class="campo">
+            <label for="ativoProdutoServico">Status</label>
+            <select
+              id="ativoProdutoServico"
+              name="ativoProdutoServico"
+              [(ngModel)]="formulario.ativoProdutoServico"
+              required
+            >
+              <option value="S">Ativo</option>
+              <option value="N">Inativo</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="acoes-formulario">
+          <button type="submit" [disabled]="formItem.invalid || salvando">
+            {{
+              salvando
+                ? 'Salvando...'
+                : editandoId === null
+                  ? 'Cadastrar'
+                  : 'Salvar alterações'
+            }}
+          </button>
+  
+          <button
+            *ngIf="editandoId !== null"
+            type="button"
+            class="botao-secundario"
+            (click)="limparFormulario()"
+          >
+            Cancelar edição
+          </button>
+        </div>
+      </form>
+    </section>
+  
+    <section class="painel">
+      <h2>Produtos e serviços cadastrados</h2>
+  
+      <p *ngIf="carregando">Carregando itens...</p>
+  
+      <p *ngIf="!carregando && !erro && itens.length === 0">
+        Nenhum item cadastrado.
+      </p>
+  
+      <div class="tabela-container" *ngIf="itens.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Tipo</th>
+              <th>Preço</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            <tr *ngFor="let item of itens">
+              <td>{{ item.item1 }}</td>
+              <td>{{ item.categoria || item.idcategoria }}</td>
+  
+              <td>
+                {{ item.tipoItem === 'P' ? 'Produto' :
+                   item.tipoItem === 'S' ? 'Serviço' : item.tipoItem }}
+              </td>
+  
+              <td>
+                {{ item.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+              </td>
+  
+              <td>
+                {{ item.ativoProdutoServico === 'S' ? 'Ativo' :
+                   item.ativoProdutoServico === 'N' ? 'Inativo' :
+                   item.ativoProdutoServico }}
+              </td>
+  
+              <td class="acoes-tabela">
+                <button type="button" (click)="editar(item)">
+                  Editar
+                </button>
+  
+                <button
+                  type="button"
+                  class="botao-excluir"
+                  (click)="excluir(item)"
+                >
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <button type="button" class="botao-secundario" (click)="listarItens()">
+        Atualizar lista
+      </button>
+    </section>
+  </div>
+  
