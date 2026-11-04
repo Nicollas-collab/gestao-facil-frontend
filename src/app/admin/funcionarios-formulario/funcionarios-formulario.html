@@ -1,0 +1,120 @@
+<p>funcionarios-formulario works!</p> 
+<div class="pagina">
+  <div class="cabecalho">
+    <div>
+        <h1>{{ editando ? 'Editar Funcionário' : 'Novo Funcionário' }}</h1>
+      <p>{{ editando ? 'Atualize os dados do funcionário.' : 'Preencha os dados para cadastrar um funcionário.' }}</p>
+    </div>
+    <button type="button" class="btn-voltar" (click)="cancelar()">
+      Voltar
+    </button>
+  </div>
+
+  <form (ngSubmit)="cadastrarFuncionario()">
+
+    <section class="card">
+      <h2>Dados pessoais</h2>
+
+      <div class="grade">
+        <div class="campo">
+          <label>Nome completo</label>
+          <input type="text" name="nome" [(ngModel)]="funcionario.nome" required>
+        </div>
+
+        <div class="campo">
+          <label>CPF</label>
+          <input type="number" name="cpf" [(ngModel)]="funcionario.cpf" required>
+        </div>
+
+        <div class="campo">
+          <label>Data de nascimento</label>
+          <input type="date" name="dataNascimento" [(ngModel)]="funcionario.dataNascimento" required>
+        </div>
+
+        <div class="campo">
+          <label>Sexo</label>
+          <select name="sexo" [(ngModel)]="funcionario.sexo" required>
+            <option value="">Selecione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="O">Outro</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>E-mail</label>
+          <input type="email" name="email" [(ngModel)]="funcionario.email" required>
+        </div>
+
+        <div class="campo">
+          <label>Telefone</label>
+          <input type="number" name="telefone" [(ngModel)]="funcionario.telefone" required>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Dados profissionais</h2>
+
+      <div class="grade">
+        <div class="campo">
+          <label>Cargo</label>
+          <input type="text" name="cargo" [(ngModel)]="funcionario.cargo" required>
+        </div>
+
+        <div class="campo">
+          <label>Data de admissão</label>
+          <input type="date" name="dataAdmissao" [(ngModel)]="funcionario.dataAdmissao" required>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Endereços</h2>
+
+      <div class="grade">
+        <div class="campo">
+          <label>CEP</label>
+          <input type="text" name="cep" [(ngModel)]="endereco.cep">
+        </div>
+
+        <div class="campo">
+          <label>Número</label>
+          <input type="text" name="numero" [(ngModel)]="endereco.numero">
+        </div>
+
+        <div class="campo">
+          <label>Complemento</label>
+          <input type="text" name="complemento" [(ngModel)]="endereco.complemento">
+        </div>
+      </div>
+
+      <button type="button" class="btn-adicionar" (click)="adicionarEndereco()">
+        + Adicionar endereço
+      </button>
+
+      <div class="lista-enderecos" *ngFor="let item of funcionario.enderecos; let i = index">
+        <span>
+          CEP: {{ item.cep }} | Nº: {{ item.numero }} | {{ item.complemento }}
+        </span>
+        <button type="button" class="btn-remover" (click)="removerEndereco(i)">
+          Remover
+        </button>
+      </div>
+    </section>
+
+    <p class="mensagem erro" *ngIf="erro">{{ erro }}</p>
+    <p class="mensagem sucesso" *ngIf="sucesso">{{ sucesso }}</p>
+
+    <div class="acoes">
+      <button type="button" class="btn-cancelar" (click)="cancelar()">
+        Cancelar
+      </button>
+
+      <button type="submit" class="btn-salvar" [disabled]="carregando">
+        {{ carregando ? 'Salvando...' : (editando ? 'Salvar alterações' : 'Cadastrar funcionário') }}
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -1,7 +1,7 @@
 export interface Endereco {
   idendereco?: number;
   cep: string;
-  numero: number;
+  numero: string;
   complemento: string;
 }
 

@@ -4,7 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Atendimento } from '../../models/atendimento';
+import { Pessoa } from '../../models/pessoa';
+
 import { AtendimentoService } from '../../servicos/atendimento.servicos';
+import { PessoaService } from '../../servicos/pessoa.service';
 
 @Component({
   selector: 'app-atendimentos',
@@ -14,19 +17,26 @@ import { AtendimentoService } from '../../servicos/atendimento.servicos';
   styleUrl: './atendimentos.css'
 })
 export class Atendimentos implements OnInit {
+
   atendimentos: Atendimento[] = [];
+  pessoas: Pessoa[] = [];
 
   formulario: Atendimento = this.novoAtendimento();
 
   editando = false;
   carregando = false;
+  carregandoPessoas = false;
   mensagem = '';
   erro = '';
 
-  constructor(private atendimentoService: AtendimentoService) {}
+  constructor(
+    private atendimentoService: AtendimentoService,
+    private pessoaService: PessoaService
+  ) {}
 
   ngOnInit(): void {
     this.listarAtendimentos();
+    this.listarPessoas();
   }
 
   novoAtendimento(): Atendimento {
@@ -35,6 +45,22 @@ export class Atendimentos implements OnInit {
       dataAtendimento: new Date().toISOString().substring(0, 10),
       statusAtendimento: 'Aberto'
     };
+  }
+
+  listarPessoas(): void {
+    this.carregandoPessoas = true;
+
+    this.pessoaService.listarPessoas().subscribe({
+      next: (dados) => {
+        this.pessoas = dados;
+        this.carregandoPessoas = false;
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar pessoas:', erro);
+        this.erro = 'Não foi possível carregar as pessoas cadastradas.';
+        this.carregandoPessoas = false;
+      }
+    });
   }
 
   listarAtendimentos(): void {
@@ -63,7 +89,7 @@ export class Atendimentos implements OnInit {
       !this.formulario.dataAtendimento ||
       !this.formulario.statusAtendimento.trim()
     ) {
-      this.erro = 'Preencha o ID da pessoa, a data e o status.';
+      this.erro = 'Preencha a pessoa, a data e o status.';
       return;
     }
 
@@ -72,6 +98,8 @@ export class Atendimentos implements OnInit {
       dataAtendimento: this.formulario.dataAtendimento,
       statusAtendimento: this.formulario.statusAtendimento.trim()
     };
+
+    this.carregando = true;
 
     if (this.editando && this.formulario.idatendimento != null) {
       const id = this.formulario.idatendimento;
@@ -85,15 +113,20 @@ export class Atendimentos implements OnInit {
         error: (erro) => {
           console.error('Erro ao atualizar atendimento:', erro);
           this.erro = erro.error?.mensagem || 'Não foi possível atualizar o atendimento.';
+          this.carregando = false;
         }
       });
     } else {
       this.atendimentoService.cadastrar(dados).subscribe({
         next: () => {
+          this.mensagem = 'Atendimento cadastrado com sucesso!';
+          this.formulario = this.novoAtendimento();
           this.listarAtendimentos();
         },
         error: (erro) => {
           console.error('Erro ao cadastrar atendimento:', erro);
+          this.erro = erro.error?.mensagem || 'Não foi possível cadastrar o atendimento.';
+          this.carregando = false;
         }
       });
     }
@@ -145,4 +178,14 @@ export class Atendimentos implements OnInit {
       }
     });
   }
+
+  // Retorna o nome da pessoa pelo ID associado ao atendimento.
+  nomePessoa(idPessoa: number): string {
+    const pessoa = this.pessoas.find(
+      p => p.idPessoa === idPessoa
+    );
+
+    return pessoa ? pessoa.nome : 'Pessoa não encontrada';
+  }
+
 }

@@ -1,0 +1,155 @@
+
+.pagina {
+  padding: 30px;
+  background: #f4f6fb;
+  min-height: 100vh;
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.cabecalho h1 {
+  color: #263b80;
+  margin-bottom: 5px;
+}
+
+.cabecalho p {
+  color: #777;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.card h2 {
+  color: #354a9b;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.campo label {
+  color: #444;
+  font-weight: 600;
+}
+
+.campo input,
+.campo select {
+  padding: 12px;
+  border: 1px solid #d5d9e5;
+  border-radius: 8px;
+  outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #536dce;
+  box-shadow: 0 0 0 2px rgba(83, 109, 206, 0.12);
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 17px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-adicionar {
+  margin-top: 20px;
+  background: #e4eaff;
+  color: #354a9b;
+}
+
+.lista-enderecos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f2f5ff;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  gap: 12px;
+}
+
+.btn-remover {
+  background: #ffe5e5;
+  color: #c0392b;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-voltar,
+.btn-cancelar {
+  background: #e5e7eb;
+  color: #333;
+}
+
+.btn-salvar {
+  background: #4058b5;
+  color: white;
+}
+
+.btn-salvar:hover {
+  background: #304596;
+}
+
+.btn-salvar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mensagem {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.erro {
+  color: #a52828;
+  background: #ffe5e5;
+}
+
+.sucesso {
+  color: #176b38;
+  background: #e1f7e9;
+}
+
+@media (max-width: 700px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .cabecalho {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .lista-enderecos {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

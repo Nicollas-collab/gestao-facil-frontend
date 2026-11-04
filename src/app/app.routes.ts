@@ -19,6 +19,7 @@ import { Estoque } from './admin/estoque/estoque';
 import { EntradasProdutos } from './admin/entradas-produtos/entradas-produtos';
 import { Atendimentos } from './admin/atendimentos/atendimentos';
 import { AtendimentosItens } from './admin/atendimentos-itens/atendimentos-itens';
+import { FuncionariosFormulario } from './admin/funcionarios-formulario/funcionarios-formulario';
 
 export const routes: Routes = [
   // Loja virtual
@@ -40,6 +41,10 @@ export const routes: Routes = [
   { path: 'admin/pedidos', component: Pedidos },
   { path: 'admin/estoque', component: Estoque },
   { path: 'admin/entradas-produtos', component: EntradasProdutos },
+  {path: 'admin/funcionarios', component: Funcionarios},
+  { path: 'admin/funcionarios/novo', component: FuncionariosFormulario },
+  { path: 'admin/funcionarios/editar/:id', component: FuncionariosFormulario },
+  
 
   { path: '**', redirectTo: '' },
 ];

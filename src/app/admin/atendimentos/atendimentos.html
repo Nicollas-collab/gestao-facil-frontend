@@ -11,21 +11,40 @@
       <h2>{{ editando ? 'Editar atendimento' : 'Novo atendimento' }}</h2>
   
       <form (ngSubmit)="salvar()">
+
         <div class="campos">
+      
           <div class="campo">
-            <label for="idpessoa">ID da pessoa</label>
-            <input
+            <label for="idpessoa">Pessoa</label>
+      
+            <select
               id="idpessoa"
-              type="number"
               name="idpessoa"
               [(ngModel)]="formulario.idpessoa"
-              min="1"
               required
-            />
+            >
+              <option [ngValue]="0">Selecione uma pessoa</option>
+      
+              <option
+                *ngFor="let pessoa of pessoas"
+                [ngValue]="pessoa.idPessoa"
+              >
+                {{ pessoa.nome }} - CPF: {{ pessoa.CPF }}
+              </option>
+            </select>
+      
+            <small *ngIf="carregandoPessoas">
+              Carregando pessoas...
+            </small>
+      
+            <small *ngIf="!carregandoPessoas && pessoas.length === 0">
+              Nenhuma pessoa cadastrada.
+            </small>
           </div>
-  
+      
           <div class="campo">
             <label for="dataAtendimento">Data do atendimento</label>
+      
             <input
               id="dataAtendimento"
               type="date"
@@ -34,9 +53,10 @@
               required
             />
           </div>
-  
+      
           <div class="campo">
             <label for="statusAtendimento">Status</label>
+      
             <select
               id="statusAtendimento"
               name="statusAtendimento"
@@ -49,13 +69,21 @@
               <option value="Cancelado">Cancelado</option>
             </select>
           </div>
+      
         </div>
-  
+      
         <div class="acoes">
-          <button type="submit" class="botao primario">
-            {{ editando ? 'Salvar alterações' : 'Cadastrar atendimento' }}
+      
+          <button
+            type="submit"
+            class="botao primario"
+            [disabled]="carregando"
+          >
+            {{ carregando
+              ? 'Salvando...'
+              : (editando ? 'Salvar alterações' : 'Cadastrar atendimento') }}
           </button>
-  
+      
           <button
             *ngIf="editando"
             type="button"
@@ -64,7 +92,9 @@
           >
             Cancelar
           </button>
+      
         </div>
+      
       </form>
     </section>
   
@@ -80,7 +110,7 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>ID da pessoa</th>
+              <th>Nome da pessoa</th>
               <th>Data</th>
               <th>Status</th>
               <th>Ações</th>
@@ -90,7 +120,7 @@
           <tbody>
             <tr *ngFor="let atendimento of atendimentos">
               <td>{{ atendimento.idatendimento }}</td>
-              <td>{{ atendimento.idpessoa }}</td>
+              <td>{{ nomePessoa(atendimento.idpessoa) }}</td>
               <td>{{ atendimento.dataAtendimento | date:'dd/MM/yyyy' }}</td>
               <td>{{ atendimento.statusAtendimento }}</td>
               <td class="acoes-tabela">

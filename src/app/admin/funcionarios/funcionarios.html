@@ -1,1 +1,74 @@
-<p>funcionarios works!</p>
+<div class="container">
+
+  <h2>Gerenciamento de Funcionários</h2>
+
+  <button routerLink="/admin/funcionarios/novo">
+    + Novo Funcionário
+  </button>
+
+  <p *ngIf="carregando">
+    Carregando funcionários...
+  </p>
+
+  <p *ngIf="erro" class="erro">
+    {{ erro }}
+  </p>
+
+  <table *ngIf="!carregando && funcionarios.length > 0">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Cargo</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Endereços</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let funcionario of funcionarios">
+
+        <td>{{ funcionario.idpessoa }}</td>
+        <td>{{ funcionario.nome }}</td>
+        <td>{{ funcionario.cpf }}</td>
+        <td>{{ funcionario.cargo }}</td>
+        <td>{{ funcionario.email }}</td>
+        <td>{{ funcionario.telefone }}</td>
+
+        <td>
+          <div *ngFor="let endereco of funcionario.enderecos">
+            CEP: {{ endereco.cep }} |
+            Nº: {{ endereco.numero }} |
+            {{ endereco.complemento }}
+          </div>
+        </td>
+
+        <td>
+          <button
+            class="btn-editar"
+            [routerLink]="['/admin/funcionarios/editar', funcionario.idpessoa]">
+            Editar
+          </button>
+
+          <button
+          class="btn-excluir"
+          (click)="excluirFuncionario(funcionario.idpessoa)">
+          Excluir
+        </button>
+
+        </td>
+
+      </tr>
+    </tbody>
+
+  </table>
+
+  <p *ngIf="!carregando && funcionarios.length === 0">
+    Nenhum funcionário cadastrado.
+  </p>
+
+</div>

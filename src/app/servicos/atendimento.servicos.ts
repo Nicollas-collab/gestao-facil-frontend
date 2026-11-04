@@ -1,36 +1,37 @@
-
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Atendimento } from '../models/atendimento';
 import { environment } from '../../environments/environments';
+import { Atendimento } from '../models/atendimento';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AtendimentoService {
-  private readonly apiUrl = `${environment.apiUrl}/api/Atendimento`;
 
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+
+  private readonly apiAtendimentos =
+    `${environment.apiUrl}/api/Atendimento`;
 
   listar(): Observable<Atendimento[]> {
-    return this.http.get<Atendimento[]>(this.apiUrl);
+    return this.http.get<Atendimento[]>(this.apiAtendimentos);
   }
 
-  buscarPorId(id: number): Observable<Atendimento> {
-    return this.http.get<Atendimento>(`${this.apiUrl}/${id}`);
+  buscar(id: number): Observable<Atendimento> {
+    return this.http.get<Atendimento>(`${this.apiAtendimentos}/${id}`);
   }
 
   cadastrar(atendimento: Atendimento): Observable<Atendimento> {
-    return this.http.post<Atendimento>(this.apiUrl, atendimento);
+    return this.http.post<Atendimento>(this.apiAtendimentos, atendimento);
   }
 
   atualizar(id: number, atendimento: Atendimento): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, atendimento);
+    return this.http.put<void>(`${this.apiAtendimentos}/${id}`, atendimento);
   }
 
   excluir(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiAtendimentos}/${id}`);
   }
 }
