@@ -29,7 +29,6 @@ export const routes: Routes = [
   { path: 'meus-pedidos', component: MeusPedidos },
   { path: 'pedidos/:id', component: DetalhesPedidos },
   { path: 'admin/atendimentos', component: Atendimentos },
-  { path: 'admin/atendimentos-itens', component: AtendimentosItens },
 
   // Painel administrativo
   { path: 'admin', component: Dashboard },
@@ -41,10 +40,10 @@ export const routes: Routes = [
   { path: 'admin/pedidos', component: Pedidos },
   { path: 'admin/estoque', component: Estoque },
   { path: 'admin/entradas-produtos', component: EntradasProdutos },
-  {path: 'admin/funcionarios', component: Funcionarios},
+  { path: 'admin/funcionarios', component: Funcionarios },
   { path: 'admin/funcionarios/novo', component: FuncionariosFormulario },
   { path: 'admin/funcionarios/editar/:id', component: FuncionariosFormulario },
-  
+  { path: 'admin/atendimentos-itens', component: AtendimentosItens },
 
   { path: '**', redirectTo: '' },
 ];

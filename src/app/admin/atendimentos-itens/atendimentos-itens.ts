@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +20,6 @@ import { AtendimentoitemService } from '../../servicos/atendimentoitem.servicos'
   styleUrl: './atendimentos-itens.css',
 })
 export class AtendimentosItens implements OnInit {
-
   atendimentos: Atendimento[] = [];
   itens: Item[] = [];
   funcionarios: Funcionario[] = [];
@@ -38,10 +36,11 @@ export class AtendimentosItens implements OnInit {
     private atendimentoService: AtendimentoService,
     private itemService: ItemServicos,
     private funcionarioService: FuncionarioServicos,
-    private atendimentoitemService: AtendimentoitemService
+    private atendimentoitemService: AtendimentoitemService,
   ) {}
 
   ngOnInit(): void {
+    console.log('Componente AtendimentosItens carregado!');
     this.carregarDados();
   }
 
@@ -51,7 +50,7 @@ export class AtendimentosItens implements OnInit {
       iditem: 0,
       idfuncionario: 0,
       quantidadeItens: 1,
-      valorunitarioEntrada: 0
+      valorunitarioEntrada: 0,
     };
   }
 
@@ -60,35 +59,33 @@ export class AtendimentosItens implements OnInit {
     this.erro = '';
 
     this.atendimentoService.listar().subscribe({
-      next: dados => {
+      next: (dados) => {
         this.atendimentos = dados;
       },
-      error: erro => {
+      error: (erro) => {
         console.error('Erro ao carregar atendimentos:', erro);
         this.erro = 'Não foi possível carregar os atendimentos.';
-      }
+      },
     });
 
     this.itemService.listarItens().subscribe({
-      next: dados => {
-        this.itens = dados.filter(
-          item => item.ativoProdutoServico === 'S'
-        );
+      next: (dados) => {
+        this.itens = dados.filter((item) => item.ativoProdutoServico === 'S');
       },
-      error: erro => {
+      error: (erro) => {
         console.error('Erro ao carregar itens:', erro);
         this.erro = 'Não foi possível carregar os produtos e serviços.';
-      }
+      },
     });
 
     this.funcionarioService.listarFuncionarios().subscribe({
-      next: dados => {
+      next: (dados) => {
         this.funcionarios = dados;
       },
-      error: erro => {
+      error: (erro) => {
         console.error('Erro ao carregar funcionários:', erro);
         this.erro = 'Não foi possível carregar os funcionários.';
-      }
+      },
     });
 
     this.listarAtendimentosItens();
@@ -96,15 +93,15 @@ export class AtendimentosItens implements OnInit {
 
   listarAtendimentosItens(): void {
     this.atendimentoitemService.listar().subscribe({
-      next: dados => {
+      next: (dados) => {
         this.atendimentosItens = dados;
         this.carregando = false;
       },
-      error: erro => {
+      error: (erro) => {
         console.error('Erro ao carregar itens dos atendimentos:', erro);
         this.erro = 'Não foi possível carregar os itens dos atendimentos.';
         this.carregando = false;
-      }
+      },
     });
   }
 
@@ -117,7 +114,7 @@ export class AtendimentosItens implements OnInit {
       iditem: Number(this.formulario.iditem),
       idfuncionario: Number(this.formulario.idfuncionario),
       quantidadeItens: Number(this.formulario.quantidadeItens),
-      valorunitarioEntrada: Number(this.formulario.valorunitarioEntrada)
+      valorunitarioEntrada: Number(this.formulario.valorunitarioEntrada),
     };
 
     if (
@@ -134,21 +131,17 @@ export class AtendimentosItens implements OnInit {
     this.carregando = true;
 
     if (this.editando) {
-      this.atendimentoitemService.atualizar(
-        dados.idatendimento,
-        dados.iditem,
-        dados
-      ).subscribe({
+      this.atendimentoitemService.atualizar(dados.idatendimento, dados.iditem, dados).subscribe({
         next: () => {
           this.mensagem = 'Item do atendimento atualizado com sucesso!';
           this.cancelarEdicao();
           this.listarAtendimentosItens();
         },
-        error: erro => {
+        error: (erro) => {
           console.error('Erro ao atualizar:', erro);
           this.erro = erro.error?.mensagem || 'Não foi possível atualizar o item.';
           this.carregando = false;
-        }
+        },
       });
     } else {
       this.atendimentoitemService.cadastrar(dados).subscribe({
@@ -157,11 +150,11 @@ export class AtendimentosItens implements OnInit {
           this.formulario = this.novoRegistro();
           this.listarAtendimentosItens();
         },
-        error: erro => {
+        error: (erro) => {
           console.error('Erro ao cadastrar:', erro);
           this.erro = erro.error?.mensagem || 'Não foi possível vincular o item.';
           this.carregando = false;
-        }
+        },
       });
     }
   }
@@ -179,54 +172,41 @@ export class AtendimentosItens implements OnInit {
   }
 
   excluir(registro: Atendimentoitem): void {
-    const confirmar = confirm(
-      'Deseja remover este item do atendimento?'
-    );
+    const confirmar = confirm('Deseja remover este item do atendimento?');
 
     if (!confirmar) return;
 
-    this.atendimentoitemService.excluir(
-      registro.idatendimento,
-      registro.iditem
-    ).subscribe({
+    this.atendimentoitemService.excluir(registro.idatendimento, registro.iditem).subscribe({
       next: () => {
         this.mensagem = 'Item removido com sucesso!';
         this.listarAtendimentosItens();
       },
-      error: erro => {
+      error: (erro) => {
         console.error('Erro ao excluir:', erro);
         this.erro = erro.error?.mensagem || 'Não foi possível remover o item.';
-      }
+      },
     });
   }
 
   nomeAtendimento(id: number): string {
-    const atendimento = this.atendimentos.find(
-      a => a.idatendimento === id
-    );
+    const atendimento = this.atendimentos.find((a) => a.idatendimento === id);
 
-    return atendimento
-      ? `Atendimento ${atendimento.idatendimento}`
-      : 'Atendimento não encontrado';
+    return atendimento ? `Atendimento ${atendimento.idatendimento}` : 'Atendimento não encontrado';
   }
 
   nomeItem(id: number): string {
-    const item = this.itens.find(i => i.iditem === id);
+    const item = this.itens.find((i) => i.iditem === id);
     return item ? item.item1 : 'Item não encontrado';
   }
 
   nomeFuncionario(id: number): string {
-    const funcionario = this.funcionarios.find(
-      f => f.idpessoa === id
-    );
+    const funcionario = this.funcionarios.find((f) => f.idpessoa === id);
 
     return funcionario ? funcionario.nome : 'Funcionário não encontrado';
   }
 
   atualizarValor(): void {
-    const item = this.itens.find(
-      i => i.iditem === Number(this.formulario.iditem)
-    );
+    const item = this.itens.find((i) => i.iditem === Number(this.formulario.iditem));
 
     if (item) {
       this.formulario.valorunitarioEntrada = item.preco;
