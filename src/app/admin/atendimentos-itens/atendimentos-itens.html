@@ -1,1 +1,189 @@
-<p>atendimentos-itens works!</p>
+<main class="pagina">
+  <header class="cabecalho">
+    <div>
+      <h1>Gerenciamento de Itens dos Atendimentos</h1>
+      <p>Vincule produtos e serviços aos atendimentos realizados.</p>
+    </div>
+  </header>
+
+  <!-- FORMULÁRIO -->
+  <section class="painel">
+    <h2>{{ editando ? 'Editar item do atendimento' : 'Adicionar item ao atendimento' }}</h2>
+
+    <form (ngSubmit)="salvar()">
+      <div class="campos">
+        <!-- ATENDIMENTO -->
+        <div class="campo">
+          <label for="idatendimento">Atendimento</label>
+
+          <select
+            id="idatendimento"
+            name="idatendimento"
+            [(ngModel)]="formulario.idatendimento"
+            [disabled]="editando"
+            required
+          >
+            <option [ngValue]="0">Selecione um atendimento</option>
+
+            <option *ngFor="let atendimento of atendimentos" [ngValue]="atendimento.idatendimento">
+              Atendimento {{ atendimento.idatendimento }} - Pessoa ID {{ atendimento.idpessoa }}
+            </option>
+          </select>
+        </div>
+
+        <!-- PRODUTO OU SERVIÇO -->
+        <div class="campo">
+          <label for="iditem">Produto ou serviço</label>
+
+          <select
+            id="iditem"
+            name="iditem"
+            [(ngModel)]="formulario.iditem"
+            (ngModelChange)="atualizarValor()"
+            [disabled]="editando"
+            required
+          >
+            <option [ngValue]="0">Selecione um produto ou serviço</option>
+
+            <option *ngFor="let item of itens" [ngValue]="item.iditem">
+              {{ item.item1 }} - {{ item.tipoItem }}
+            </option>
+          </select>
+        </div>
+
+        <!-- FUNCIONÁRIO -->
+        <div class="campo">
+          <label for="idfuncionario">Funcionário responsável</label>
+
+          <select
+            id="idfuncionario"
+            name="idfuncionario"
+            [(ngModel)]="formulario.idfuncionario"
+            required
+          >
+            <option [ngValue]="0">Selecione um funcionário</option>
+
+            <option *ngFor="let funcionario of funcionarios" [ngValue]="funcionario.idpessoa">
+              {{ funcionario.nome }}
+            </option>
+          </select>
+        </div>
+
+        <!-- QUANTIDADE -->
+        <div class="campo">
+          <label for="quantidadeItens">Quantidade</label>
+
+          <input
+            id="quantidadeItens"
+            type="number"
+            name="quantidadeItens"
+            [(ngModel)]="formulario.quantidadeItens"
+            min="1"
+            required
+          />
+        </div>
+
+        <!-- VALOR UNITÁRIO -->
+        <div class="campo">
+          <label for="valorunitarioEntrada">Valor unitário (R$)</label>
+
+          <input
+            id="valorunitarioEntrada"
+            type="number"
+            name="valorunitarioEntrada"
+            [(ngModel)]="formulario.valorunitarioEntrada"
+            min="0"
+            step="0.01"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- BOTÕES -->
+      <div class="acoes">
+        <button type="submit" class="botao primario" [disabled]="carregando">
+          {{ carregando ? 'Salvando...' : editando ? 'Salvar alterações' : 'Adicionar item' }}
+        </button>
+
+        <button *ngIf="editando" type="button" class="botao secundario" (click)="cancelarEdicao()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- MENSAGENS -->
+  <p *ngIf="mensagem" class="mensagem sucesso">
+    {{ mensagem }}
+  </p>
+
+  <p *ngIf="erro" class="mensagem erro">
+    {{ erro }}
+  </p>
+
+  <p *ngIf="carregando">Carregando informações...</p>
+
+  <!-- TABELA -->
+  <section class="painel">
+    <h2>Itens vinculados aos atendimentos</h2>
+
+    <div class="tabela-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Atendimento</th>
+            <th>Produto/Serviço</th>
+            <th>Funcionário</th>
+            <th>Quantidade</th>
+            <th>Valor unitário</th>
+            <th>Total</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let registro of atendimentosItens">
+            <td>
+              {{ nomeAtendimento(registro.idatendimento) }}
+            </td>
+
+            <td>
+              {{ nomeItem(registro.iditem) }}
+            </td>
+
+            <td>
+              {{ nomeFuncionario(registro.idfuncionario) }}
+            </td>
+
+            <td>
+              {{ registro.quantidadeItens }}
+            </td>
+
+            <td>
+              {{ registro.valorunitarioEntrada | currency: 'BRL' : 'symbol' : '1.2-2' }}
+            </td>
+
+            <td>
+              {{
+                registro.quantidadeItens * registro.valorunitarioEntrada
+                  | currency: 'BRL' : 'symbol' : '1.2-2'
+              }}
+            </td>
+
+            <td class="acoes-tabela">
+              <button type="button" class="botao editar" (click)="editar(registro)">Editar</button>
+
+              <button type="button" class="botao excluir" (click)="excluir(registro)">
+                Excluir
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="!carregando && atendimentosItens.length === 0">
+            <td colspan="7">Nenhum item vinculado aos atendimentos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>

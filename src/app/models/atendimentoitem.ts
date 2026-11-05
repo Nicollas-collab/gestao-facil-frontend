@@ -1,4 +1,4 @@
-export interface AtendimentoItem {
+export interface Atendimentoitem {
     idatendimento: number;
     iditem: number;
     idfuncionario: number;
