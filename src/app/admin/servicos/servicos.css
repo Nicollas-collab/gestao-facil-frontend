@@ -1,0 +1,99 @@
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  
+  h2, h3 {
+    color: #333;
+  }
+  
+  .formulario {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+  }
+  
+  .campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .campo label {
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  
+  .campo input,
+  .campo select,
+  .campo textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .campo textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .botoes {
+    display: flex;
+    gap: 10px;
+  }
+  
+  button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 5px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    opacity: 0.85;
+  }
+  
+  button:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+  
+  .cancelar {
+    background: #777;
+  }
+  
+  .desativar {
+    background: #dc2626;
+    margin-left: 5px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    background: #eee;
+  }
+  
+  .sucesso {
+    color: green;
+  }
+  
+  .erro {
+    color: red;
+  }
+  

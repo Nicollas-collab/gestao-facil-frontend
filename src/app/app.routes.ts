@@ -11,7 +11,7 @@ import { DetalhesPedidos } from './loja/detalhes-pedidos/detalhes-pedidos';
 import { Dashboard } from './admin/dashboard/dashboard';
 import { Clientes } from './admin/clientes/clientes';
 import { Produtos } from './admin/produtos/produtos';
-import { Servicoes } from './admin/servicoes/servicoes';
+import { Servicos } from './admin/servicos/servicos';
 import { Categorias } from './admin/categorias/categorias';
 import { Funcionarios } from './admin/funcionarios/funcionarios';
 import { Pedidos } from './admin/pedidos/pedidos';
@@ -34,7 +34,7 @@ export const routes: Routes = [
   { path: 'admin', component: Dashboard },
   { path: 'admin/clientes', component: Clientes },
   { path: 'admin/produtos', component: Produtos },
-  { path: 'admin/servicos', component: Servicoes },
+  { path: 'admin/servicos', component: Servicos },
   { path: 'admin/categorias', component: Categorias },
   { path: 'admin/funcionarios', component: Funcionarios },
   { path: 'admin/pedidos', component: Pedidos },

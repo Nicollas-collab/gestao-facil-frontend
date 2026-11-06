@@ -1,3 +1,4 @@
+
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,6 +14,8 @@ export class ItemServicos {
 
   private readonly apiItens = `${environment.apiUrl}/api/Item`;
   private readonly apiCategorias = `${environment.apiUrl}/api/Categorium`;
+
+  // MÉTODOS DE ITENS E PRODUTOS
 
   listarItens(): Observable<Item[]> {
     return this.http.get<Item[]>(this.apiItens);
@@ -32,5 +35,30 @@ export class ItemServicos {
 
   excluirItem(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiItens}/${id}`);
+  }
+
+  // MÉTODOS ESPECÍFICOS DE SERVIÇOS
+
+  listarServicos(): Observable<Item[]> {
+    return this.http.get<Item[]>(`${this.apiItens}/servicos`);
+  }
+
+  buscarServico(id: number): Observable<Item> {
+    return this.http.get<Item>(`${this.apiItens}/servicos/${id}`);
+  }
+
+  cadastrarServico(servico: ItemCriarDTO): Observable<Item> {
+    return this.http.post<Item>(`${this.apiItens}/servicos`, servico);
+  }
+
+  atualizarServico(id: number, servico: ItemCriarDTO): Observable<void> {
+    return this.http.put<void>(`${this.apiItens}/servicos/${id}`, servico);
+  }
+
+  desativarServico(id: number): Observable<void> {
+    return this.http.patch<void>(
+      `${this.apiItens}/servicos/${id}/desativar`,
+      {}
+    );
   }
 }
