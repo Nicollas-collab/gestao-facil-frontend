@@ -1,1 +1,72 @@
-<p>estoque works!</p>
+
+<div class="container">
+
+    <h2>Gerenciamento de Estoque</h2>
+  
+    <p *ngIf="carregando">
+      Carregando estoques...
+    </p>
+  
+    <p *ngIf="erro" class="erro">
+      {{ erro }}
+    </p>
+  
+    <p *ngIf="mensagem" class="sucesso">
+      {{ mensagem }}
+    </p>
+  
+    <div class="tabela-container">
+  
+      <table *ngIf="!carregando && estoques.length > 0">
+  
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Produto</th>
+            <th>Unidade</th>
+            <th>Quantidade em Estoque</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <tr *ngFor="let estoque of estoques">
+  
+            <td>{{ estoque.iditem }}</td>
+  
+            <td>{{ estoque.nomeItem }}</td>
+  
+            <td>{{ estoque.unidade }}</td>
+  
+            <td>
+              <input
+                type="number"
+                min="0"
+                [(ngModel)]="estoque.quantidadeEstoque"
+                name="quantidade{{ estoque.iditem }}"
+              />
+            </td>
+  
+            <td>
+              <button
+                type="button"
+                class="btn-salvar"
+                (click)="atualizarEstoque(estoque)"
+              >
+                Salvar
+              </button>
+            </td>
+  
+          </tr>
+        </tbody>
+  
+      </table>
+  
+      <p *ngIf="!carregando && estoques.length === 0 && !erro">
+        Nenhum produto encontrado no estoque.
+      </p>
+  
+    </div>
+  
+  </div>
+  

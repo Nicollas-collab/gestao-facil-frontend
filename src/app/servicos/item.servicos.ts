@@ -55,10 +55,33 @@ export class ItemServicos {
     return this.http.put<void>(`${this.apiItens}/servicos/${id}`, servico);
   }
 
+  excluirProduto(id: number): Observable<void> {
+    return this.http.delete<void>(
+      `${environment.apiUrl}/api/ProdutoItem/${id}`
+    );
+  }
+
   desativarServico(id: number): Observable<void> {
     return this.http.patch<void>(
       `${this.apiItens}/servicos/${id}/desativar`,
       {}
     );
   }
+  
+  desativarProduto(id: number): Observable<any> {
+    return this.http.patch<any>(
+      `${environment.apiUrl}/api/ProdutoItem/${id}/desativar`,
+      {}
+    );
+  }
+
+  
+desativarProdutos(id: number): Observable<any> {
+  return this.http.patch<any>(
+    `${this.apiItens}/${id}/desativar`,
+    {}
+  );
+}
+
+
 }

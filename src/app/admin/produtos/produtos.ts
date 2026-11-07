@@ -167,14 +167,15 @@ export class Produtos implements OnInit {
     this.erro = '';
     this.mensagem = '';
 
-    this.itemServicos.excluirItem(item.iditem).subscribe({
+    const requisicao = this.itemServicos.excluirItem(item.iditem);
+
+    requisicao.subscribe({
       next: () => {
-        this.mensagem = 'Item excluído com sucesso.';
+        this.mensagem = 'Item excluído com sucesso!';
         this.listarItens();
       },
       error: (erro: any) => {
         console.error('Erro ao excluir item:', erro);
-
         console.log('Status HTTP:', erro.status);
         console.log('Resposta do backend:', erro.error);
 
@@ -182,6 +183,44 @@ export class Produtos implements OnInit {
       },
     });
   }
+
+  
+desativar(item: Item): void {
+  if (item.iditem === undefined) {
+    return;
+  }
+
+  if (item.tipoItem !== 'P') {
+    return;
+  }
+
+  const confirmar = window.confirm(
+    `Deseja desativar o produto "${item.item1}"?`
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  this.erro = '';
+  this.mensagem = '';
+
+  this.itemServicos.desativarProduto(item.iditem).subscribe({
+    next: (resposta) => {
+      this.mensagem =
+        resposta?.mensagem ?? 'Produto desativado com sucesso!';
+
+      this.listarItens();
+    },
+    error: (erro: any) => {
+      console.error('Erro ao desativar produto:', erro);
+
+      this.erro =
+        erro.error?.mensagem ?? 'Não foi possível desativar o produto.';
+    },
+  });
+}
+
 
   limparFormulario(): void {
     this.formulario = this.novoFormulario();
