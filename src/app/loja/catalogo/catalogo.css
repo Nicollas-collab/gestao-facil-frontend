@@ -1,0 +1,76 @@
+
+.catalogo-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.catalogo-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.catalogo-header h1 {
+  color: #287a55;
+  font-size: 30px;
+}
+
+.catalogo-header p {
+  color: #666;
+}
+
+.grade-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+}
+
+.card-item {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.card-item:hover {
+  transform: translateY(-4px);
+}
+
+.tipo-item {
+  display: inline-block;
+  background: #e2f2e9;
+  color: #287a55;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.card-item h2 {
+  color: #333;
+  margin-top: 18px;
+}
+
+.descricao {
+  color: #666;
+  min-height: 45px;
+}
+
+.preco {
+  color: #287a55;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.mensagem {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+}
+
+.erro {
+  text-align: center;
+  color: red;
+}

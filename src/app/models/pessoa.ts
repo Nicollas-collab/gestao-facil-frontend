@@ -1,5 +1,13 @@
+
+export interface Endereco {
+  idPessoa?: number;
+  cep: string;
+  numero: string;
+  complemento: string;
+}
+
 export interface Pessoa {
-  idPessoa: number;
+  idPessoa?: number;
   nome: string;
   CPF: number;
   dataNascimento: string;
@@ -7,4 +15,5 @@ export interface Pessoa {
   email: string;
   telefone: number;
   ativoPessoa: string;
+  enderecos: Endereco[];
 }

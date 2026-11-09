@@ -1,1 +1,65 @@
-<p>catalogo works!</p>
+
+<div class="catalogo-container">
+
+  <header class="catalogo-header">
+    <h1>Nossa Loja</h1>
+    <a routerLink="/catalogo">Continuar comprando</a>
+
+
+    <a routerLink="/carrinho">Ver meu carrinho</a>
+
+    <p *ngIf="mensagemCarrinho" class="mensagem">
+      {{ mensagemCarrinho }}
+    </p>
+
+    <p>Conheça nossos produtos e serviços disponíveis.</p>
+  </header>
+
+  <p *ngIf="carregando" class="mensagem">
+    Carregando catálogo...
+  </p>
+
+  <p *ngIf="erro" class="erro">
+    {{ erro }}
+  </p>
+
+  <div
+    class="grade-produtos"
+    *ngIf="!carregando && !erro && itens.length > 0"
+  >
+
+    <div class="card-item" *ngFor="let item of itens">
+
+      <span class="tipo-item">
+        {{ nomeTipo(item.tipoItem) }}
+      </span>
+
+      <h2>{{ item.item1 }}</h2>
+
+      <p class="descricao">
+        {{ item.descricaoItem }}
+      </p>
+
+      <p class="preco">
+        {{ item.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+      </p>
+
+      <button
+        type="button"
+        (click)="adicionarAoCarrinho(item)"
+      >
+        Adicionar ao carrinho
+      </button>
+
+    </div>
+
+  </div>
+
+  <p
+    *ngIf="!carregando && !erro && itens.length === 0"
+    class="mensagem"
+  >
+    Nenhum produto ou serviço disponível no momento.
+  </p>
+
+</div>

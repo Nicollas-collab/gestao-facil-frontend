@@ -1,3 +1,4 @@
+
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -17,5 +18,13 @@ export class PessoaService {
 
   listarPessoas(): Observable<Pessoa[]> {
     return this.http.get<Pessoa[]>(this.apiPessoas);
+  }
+
+  cadastrarPessoa(pessoa: Pessoa): Observable<Pessoa> {
+    return this.http.post<Pessoa>(this.apiPessoas, pessoa);
+  }
+
+  atualizarPessoa(id: number, pessoa: Pessoa): Observable<void> {
+    return this.http.put<void>(`${this.apiPessoas}/${id}`, pessoa);
   }
 }

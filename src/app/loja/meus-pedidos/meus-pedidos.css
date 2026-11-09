@@ -1,0 +1,179 @@
+
+.meus-pedidos-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 25px;
+  font-family: Arial, sans-serif;
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.cabecalho h1 {
+  color: #333;
+  margin: 0;
+}
+
+.descricao {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.botao-voltar,
+.botao-detalhes {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #7b4bb7;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.botao-voltar:hover,
+.botao-detalhes:hover {
+  background-color: #63369b;
+}
+
+.lista-pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pedido-card {
+  background-color: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pedido-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.pedido-cabecalho h2 {
+  margin: 0;
+  color: #333;
+}
+
+.status {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #eee;
+}
+
+.pendente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.andamento {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.concluido {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.cancelado {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.itens-pedido {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #faf8fc;
+  border-radius: 8px;
+}
+
+.itens-pedido h3 {
+  margin-top: 0;
+  color: #444;
+}
+
+.itens-pedido div {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.itens-pedido div:last-child {
+  border-bottom: none;
+}
+
+.pedido-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.pedido-rodape h3 {
+  margin: 0;
+}
+
+.botao-atualizar {
+  margin-top: 25px;
+  padding: 12px 20px;
+  background-color: #7b4bb7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.botao-atualizar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mensagem-erro {
+  padding: 15px;
+  background-color: #ffe8e8;
+  color: #b00020;
+  border-radius: 6px;
+}
+
+.carregando,
+.sem-pedidos {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .meus-pedidos-container {
+    padding: 15px;
+  }
+
+  .cabecalho,
+  .pedido-cabecalho,
+  .pedido-rodape {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .itens-pedido div {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

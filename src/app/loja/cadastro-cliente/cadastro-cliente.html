@@ -1,1 +1,52 @@
-<p>cadastro-cliente works!</p>
+
+<div class="cadastro-container">
+  <h1>Cadastro de Cliente</h1>
+  <p>Preencha seus dados para começar a comprar.</p>
+
+  <form (ngSubmit)="cadastrar()" #form="ngForm">
+
+    <h2>Dados pessoais</h2>
+
+    <label>Nome completo</label>
+    <input type="text" name="nome" [(ngModel)]="pessoa.nome" required>
+
+    <label>CPF</label>
+    <input type="number" name="cpf" [(ngModel)]="pessoa.CPF" required>
+
+    <label>Data de nascimento</label>
+    <input type="date" name="dataNascimento" [(ngModel)]="pessoa.dataNascimento" required>
+
+    <label>Sexo</label>
+    <select name="sexo" [(ngModel)]="pessoa.sexo" required>
+      <option value="">Selecione</option>
+      <option value="M">Masculino</option>
+      <option value="F">Feminino</option>
+      <option value="O">Outro</option>
+    </select>
+
+    <label>E-mail</label>
+    <input type="email" name="email" [(ngModel)]="pessoa.email" required>
+
+    <label>Telefone</label>
+    <input type="number" name="telefone" [(ngModel)]="pessoa.telefone" required>
+
+    <h2>Endereço</h2>
+
+    <label>CEP</label>
+    <input type="text" name="cep" [(ngModel)]="pessoa.enderecos[0].cep" required>
+
+    <label>Número</label>
+    <input type="text" name="numero" [(ngModel)]="pessoa.enderecos[0].numero" required>
+
+    <label>Complemento</label>
+    <input type="text" name="complemento" [(ngModel)]="pessoa.enderecos[0].complemento">
+
+    <button type="submit" [disabled]="form.invalid">
+      Cadastrar
+    </button>
+
+    <p class="sucesso" *ngIf="mensagem">{{ mensagem }}</p>
+    <p class="erro" *ngIf="erro">{{ erro }}</p>
+
+  </form>
+</div>

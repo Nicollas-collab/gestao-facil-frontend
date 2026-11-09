@@ -1,1 +1,135 @@
-<p>pedidos works!</p>
+
+<div class="pedidos-container">
+
+  <div class="cabecalho">
+    <h1>Gerenciamento de Pedidos</h1>
+
+    <button type="button" (click)="carregarPedidos()">
+      Atualizar pedidos
+    </button>
+  </div>
+
+  <!-- Mensagens -->
+  <p *ngIf="mensagem" class="mensagem-sucesso">
+    {{ mensagem }}
+  </p>
+
+  <p *ngIf="erro" class="mensagem-erro">
+    {{ erro }}
+  </p>
+
+  <p *ngIf="carregando" class="carregando">
+    Carregando pedidos...
+  </p>
+
+  <div
+    *ngIf="!carregando && !erro && pedidos.length === 0"
+    class="sem-pedidos">
+    Nenhum pedido cadastrado.
+  </div>
+
+  <!-- Tabela de pedidos -->
+  <div
+    class="tabela-container"
+    *ngIf="!carregando && pedidos.length > 0">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nº Pedido</th>
+          <th>Cliente</th>
+          <th>Data</th>
+          <th>Itens comprados</th>
+          <th>Valor total</th>
+          <th>Status atual</th>
+          <th>Alterar status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let pedido of pedidos">
+
+          <td>
+            #{{ pedido.idpedido }}
+          </td>
+
+          <td>
+            {{ pedido.cliente || 'Cliente #' + pedido.idpessoa }}
+          </td>
+
+          <td>
+            {{ pedido.dataPedido | date:'dd/MM/yyyy HH:mm' }}
+          </td>
+
+          <td>
+            <div
+              class="item-pedido"
+              *ngFor="let item of pedido.itens || []">
+
+              {{ item.nomeItem || ('Item #' + item.iditem) }}
+
+              <span>
+                ({{ item.quantidade }}x)
+              </span>
+
+            </div>
+          </td>
+
+          <td>
+            {{ pedido.valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          </td>
+
+          <!-- Status atual -->
+          <td>
+            <span
+              class="status"
+              [ngClass]="{
+                'pendente': pedido.statusPedido === 'Pendente',
+                'concluido': pedido.statusPedido === 'Concluído',
+                'andamento': pedido.statusPedido === 'Em andamento',
+                'cancelado': pedido.statusPedido === 'Cancelado'
+              }">
+
+              {{ pedido.statusPedido }}
+
+            </span>
+          </td>
+
+          <!-- Alterar status -->
+          <td>
+            <div class="controle-status">
+
+              <select
+                [(ngModel)]="pedido.novoStatus"
+                [disabled]="pedido.salvando ?? false">
+
+                <option
+                  *ngFor="let status of statusDisponiveis"
+                  [ngValue]="status">
+
+                  {{ status }}
+
+                </option>
+
+              </select>
+
+              <button
+                type="button"
+                (click)="salvarStatus(pedido)"
+                [disabled]="(pedido.salvando ?? false) ||
+                            pedido.novoStatus === pedido.statusPedido">
+
+                {{ pedido.salvando ? 'Salvando...' : 'Salvar status' }}
+
+              </button>
+
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

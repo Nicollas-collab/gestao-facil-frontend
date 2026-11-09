@@ -1,1 +1,112 @@
-<p>carrinho works!</p>
+
+<div class="carrinho-container">
+
+  <h1>Meu Carrinho</h1>
+
+  <a routerLink="/catalogo">Continuar comprando</a>
+
+  <!-- Mensagens de sucesso e erro -->
+  <p *ngIf="mensagem" class="mensagem-sucesso">
+    {{ mensagem }}
+  </p>
+
+  <p *ngIf="erro" class="mensagem-erro">
+    {{ erro }}
+  </p>
+
+  <div *ngIf="itens.length > 0; else carrinhoVazio">
+
+    <div class="carrinho-item" *ngFor="let entrada of itens">
+
+      <div class="item-info">
+        <h2>{{ entrada.item.item1 }}</h2>
+
+        <p>
+          {{ entrada.item.tipoItem === 'P' ? 'Produto' : 'Serviço' }}
+        </p>
+
+        <p>
+          Preço unitário:
+          {{ entrada.item.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </p>
+      </div>
+
+      <div class="quantidade">
+        <button
+          type="button"
+          (click)="diminuir(entrada.item)"
+          [disabled]="finalizando">
+          -
+        </button>
+
+        <span>{{ entrada.quantidade }}</span>
+
+        <button
+          type="button"
+          (click)="aumentar(entrada.item)"
+          [disabled]="finalizando">
+          +
+        </button>
+      </div>
+
+      <p class="subtotal">
+        Subtotal:
+        {{
+          entrada.item.preco * entrada.quantidade
+          | currency:'BRL':'symbol':'1.2-2':'pt-BR'
+        }}
+      </p>
+
+      <button
+        type="button"
+        class="botao-remover"
+        (click)="remover(entrada.item)"
+        [disabled]="finalizando">
+        Remover
+      </button>
+
+    </div>
+
+    <!-- Total do carrinho -->
+    <div class="total">
+      <h2>
+        Total:
+        {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+      </h2>
+    </div>
+
+    <!-- Botões do carrinho -->
+    <div class="acoes-carrinho">
+
+      <button
+        type="button"
+        class="botao-limpar"
+        (click)="limpar()"
+        [disabled]="finalizando">
+        Limpar carrinho
+      </button>
+
+      <button
+        type="button"
+        class="botao-finalizar"
+        (click)="finalizarCompra()"
+        [disabled]="finalizando || itens.length === 0">
+
+        {{ finalizando ? 'Finalizando...' : 'Finalizar compra' }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Carrinho vazio -->
+  <ng-template #carrinhoVazio>
+    <p>Seu carrinho está vazio.</p>
+
+    <a routerLink="/catalogo">
+      Ver produtos e serviços
+    </a>
+  </ng-template>
+
+</div>
