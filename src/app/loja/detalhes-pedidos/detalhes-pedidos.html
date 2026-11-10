@@ -1,1 +1,86 @@
-<p>detalhes-pedidos works!</p>
+<div class="detalhes-container">
+  <div class="cabecalho">
+    <h1>Detalhes do Pedido</h1>
+    <div class="navegacao-home">
+        <a routerLink="/home" class="botao-home"> ← Voltar para Home </a>
+      </div>
+    <a routerLink="/meus-pedidos" class="botao-voltar"> Voltar aos meus pedidos </a>
+  </div>
+
+  <p *ngIf="carregando" class="carregando">Carregando detalhes do pedido...</p>
+
+  <div *ngIf="erro" class="mensagem-erro">
+    {{ erro }}
+  </div>
+
+  <div *ngIf="!carregando && pedido as p" class="pedido-card">
+    <div class="pedido-cabecalho">
+      <h2>Pedido #{{ p.idpedido }}</h2>
+
+      <span
+        class="status"
+        [ngClass]="{
+          pendente: p.statusPedido === 'Pendente',
+          andamento: p.statusPedido === 'Em andamento',
+          concluido: p.statusPedido === 'Concluído',
+          cancelado: p.statusPedido === 'Cancelado',
+        }"
+      >
+        {{ p.statusPedido }}
+      </span>
+    </div>
+
+    <div class="informacoes">
+      <p><strong>Cliente:</strong> {{ p.cliente }}</p>
+
+      <p>
+        <strong>Data do pedido:</strong>
+        {{ p.dataPedido | date: 'dd/MM/yyyy HH:mm' }}
+      </p>
+
+      <p>
+        <strong>Número do pedido:</strong>
+        #{{ p.idpedido }}
+      </p>
+    </div>
+
+    <h3>Itens comprados</h3>
+
+    <div class="tabela-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto ou serviço</th>
+            <th>Quantidade</th>
+            <th>Valor unitário</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of p.itens">
+            <td>{{ item.nomeItem }}</td>
+            <td>{{ item.quantidade }}</td>
+
+            <td>
+              {{ item.valorUnitario | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </td>
+
+            <td>
+              {{ item.subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total">
+      <h2>
+        Total do pedido:
+        {{ p.valorTotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+      </h2>
+    </div>
+
+    <a routerLink="/meus-pedidos" class="botao-voltar"> Voltar aos pedidos </a>
+  </div>
+</div>

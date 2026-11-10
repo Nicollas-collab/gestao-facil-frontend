@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 // Loja virtual
+import { Home } from './loja/home/home';
 import { Catalogo } from './loja/catalogo/catalogo';
 import { CadastroCliente } from './loja/cadastro-cliente/cadastro-cliente';
 import { Carrinho } from './loja/carrinho/carrinho';
@@ -22,17 +23,16 @@ import { AtendimentosItens } from './admin/atendimentos-itens/atendimentos-itens
 import { FuncionariosFormulario } from './admin/funcionarios-formulario/funcionarios-formulario';
 
 export const routes: Routes = [
-  // Loja virtual
-  { path: '', redirectTo: 'admin', pathMatch: 'full' },
+  // LOJA VIRTUAL
+  { path: '', component: Home, pathMatch: 'full' },
+  { path: 'home', component: Home },
+  { path: 'catalogo', component: Catalogo },
   { path: 'cadastro-cliente', component: CadastroCliente },
   { path: 'carrinho', component: Carrinho },
   { path: 'meus-pedidos', component: MeusPedidos },
   { path: 'pedidos/:id', component: DetalhesPedidos },
-  { path: 'admin/atendimentos', component: Atendimentos },
-  { path: 'catalogo', component: Catalogo },
 
-
-  // Painel administrativo
+  // PAINEL ADMINISTRATIVO
   { path: 'admin', component: Dashboard },
   { path: 'admin/clientes', component: Clientes },
   { path: 'admin/produtos', component: Produtos },
@@ -44,12 +44,9 @@ export const routes: Routes = [
   { path: 'admin/funcionarios', component: Funcionarios },
   { path: 'admin/funcionarios/novo', component: FuncionariosFormulario },
   { path: 'admin/funcionarios/editar/:id', component: FuncionariosFormulario },
+  { path: 'admin/atendimentos', component: Atendimentos },
   { path: 'admin/atendimentos-itens', component: AtendimentosItens },
-  
 
-
-
-
-
+  // ROTA NÃO ENCONTRADA
   { path: '**', redirectTo: '' },
 ];

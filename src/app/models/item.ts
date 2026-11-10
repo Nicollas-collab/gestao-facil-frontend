@@ -1,4 +1,3 @@
-
 export interface Item {
   iditem?: number;
   idcategoria: number;
@@ -17,4 +16,7 @@ export interface ItemCriarDTO {
   preco: number;
   tipoItem: string;
   ativoProdutoServico: string;
+
+  unidade?: string;
+  quantidadeInicial?: number;
 }

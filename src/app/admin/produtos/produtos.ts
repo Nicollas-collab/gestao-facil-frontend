@@ -42,8 +42,10 @@ export class Produtos implements OnInit {
       item1: '',
       descricaoItem: '',
       preco: 0,
-      tipoItem: '',
+      tipoItem: 'P',
       ativoProdutoServico: 'S',
+      unidade: 'UN',
+      quantidadeInicial: 0,
     };
   }
 
@@ -53,12 +55,12 @@ export class Produtos implements OnInit {
 
     this.itemServicos.listarItens().subscribe({
       next: (dados: Item[]) => {
-        this.itens = dados;
+        this.itens = dados.filter((item) => item.tipoItem === 'P');
         this.carregando = false;
       },
       error: (erro: unknown) => {
-        console.error('Erro ao carregar itens:', erro);
-        this.erro = 'Não foi possível carregar os produtos e serviços.';
+        console.error('Erro ao carregar produtos:', erro);
+        this.erro = 'Não foi possível carregar os produtos.';
         this.carregando = false;
       },
     });
@@ -77,56 +79,75 @@ export class Produtos implements OnInit {
   }
 
   salvar(): void {
+    this.erro = '';
+    this.mensagem = '';
+
     if (
       !this.formulario.idcategoria ||
       !this.formulario.item1.trim() ||
       !this.formulario.descricaoItem.trim() ||
+      !Number.isFinite(this.formulario.preco) ||
       this.formulario.preco < 0 ||
-      !this.formulario.tipoItem ||
       !this.formulario.ativoProdutoServico
     ) {
       this.erro = 'Preencha todos os campos corretamente.';
       return;
     }
 
+    if (this.editandoId === null) {
+      if (
+        !this.formulario.unidade ||
+        this.formulario.quantidadeInicial == null ||
+        !Number.isInteger(this.formulario.quantidadeInicial) ||
+        this.formulario.quantidadeInicial < 0
+      ) {
+        this.erro = 'Informe a unidade e uma quantidade inicial válida.';
+        return;
+      }
+    }
+
     this.salvando = true;
-    this.erro = '';
-    this.mensagem = '';
 
     const dados: ItemCriarDTO = {
       idcategoria: this.formulario.idcategoria,
       item1: this.formulario.item1.trim(),
       descricaoItem: this.formulario.descricaoItem.trim(),
       preco: this.formulario.preco,
-      tipoItem: this.formulario.tipoItem,
+      tipoItem: 'P',
       ativoProdutoServico: this.formulario.ativoProdutoServico,
     };
+
+    // Unidade e quantidade são enviadas no cadastro.
+    if (this.editandoId === null) {
+      dados.unidade = this.formulario.unidade;
+      dados.quantidadeInicial = this.formulario.quantidadeInicial;
+    }
 
     if (this.editandoId !== null) {
       this.itemServicos.atualizarItem(this.editandoId, dados).subscribe({
         next: () => {
-          this.mensagem = 'Item atualizado com sucesso!';
           this.limparFormulario();
+          this.mensagem = 'Produto atualizado com sucesso!';
           this.salvando = false;
           this.listarItens();
         },
-        error: (erro: unknown) => {
-          console.error('Erro ao atualizar item:', erro);
-          this.erro = 'Não foi possível atualizar o item.';
+        error: (erro: any) => {
+          console.error('Erro ao atualizar produto:', erro);
+          this.erro = erro.error?.mensagem ?? 'Não foi possível atualizar o produto.';
           this.salvando = false;
         },
       });
     } else {
       this.itemServicos.cadastrarItem(dados).subscribe({
         next: () => {
-          this.mensagem = 'Item cadastrado com sucesso!';
           this.limparFormulario();
+          this.mensagem = 'Produto cadastrado com sucesso!';
           this.salvando = false;
           this.listarItens();
         },
-        error: (erro: unknown) => {
-          console.error('Erro ao cadastrar item:', erro);
-          this.erro = 'Não foi possível cadastrar o item.';
+        error: (erro: any) => {
+          console.error('Erro ao cadastrar produto:', erro);
+          this.erro = erro.error?.mensagem ?? 'Não foi possível cadastrar o produto.';
           this.salvando = false;
         },
       });
@@ -134,9 +155,7 @@ export class Produtos implements OnInit {
   }
 
   editar(item: Item): void {
-    if (item.iditem === undefined) {
-      return;
-    }
+    if (item.iditem === undefined) return;
 
     this.editandoId = item.iditem;
 
@@ -145,7 +164,7 @@ export class Produtos implements OnInit {
       item1: item.item1,
       descricaoItem: item.descricaoItem,
       preco: item.preco,
-      tipoItem: item.tipoItem,
+      tipoItem: 'P',
       ativoProdutoServico: item.ativoProdutoServico,
     };
 
@@ -154,73 +173,50 @@ export class Produtos implements OnInit {
   }
 
   excluir(item: Item): void {
-    if (item.iditem === undefined) {
-      return;
-    }
+    if (item.iditem === undefined) return;
 
     const confirmar = window.confirm(`Deseja excluir "${item.item1}"?`);
 
-    if (!confirmar) {
-      return;
-    }
+    if (!confirmar) return;
 
     this.erro = '';
     this.mensagem = '';
 
-    const requisicao = this.itemServicos.excluirItem(item.iditem);
-
-    requisicao.subscribe({
+    this.itemServicos.excluirItem(item.iditem).subscribe({
       next: () => {
-        this.mensagem = 'Item excluído com sucesso!';
+        this.mensagem = 'Produto excluído com sucesso!';
         this.listarItens();
       },
       error: (erro: any) => {
-        console.error('Erro ao excluir item:', erro);
-        console.log('Status HTTP:', erro.status);
-        console.log('Resposta do backend:', erro.error);
-
-        this.erro = erro.error?.mensagem ?? 'Não foi possível excluir o item.';
+        console.error('Erro ao excluir produto:', erro);
+        this.erro = erro.error?.mensagem ?? 'Não foi possível excluir o produto.';
       },
     });
   }
 
-  
-desativar(item: Item): void {
-  if (item.iditem === undefined) {
-    return;
+  desativar(item: Item): void {
+    if (item.iditem === undefined || item.tipoItem !== 'P') {
+      return;
+    }
+
+    const confirmar = window.confirm(`Deseja desativar o produto "${item.item1}"?`);
+
+    if (!confirmar) return;
+
+    this.erro = '';
+    this.mensagem = '';
+
+    this.itemServicos.desativarProduto(item.iditem).subscribe({
+      next: (resposta) => {
+        this.mensagem = resposta?.mensagem ?? 'Produto desativado com sucesso!';
+        this.listarItens();
+      },
+      error: (erro: any) => {
+        console.error('Erro ao desativar produto:', erro);
+        this.erro = erro.error?.mensagem ?? 'Não foi possível desativar o produto.';
+      },
+    });
   }
-
-  if (item.tipoItem !== 'P') {
-    return;
-  }
-
-  const confirmar = window.confirm(
-    `Deseja desativar o produto "${item.item1}"?`
-  );
-
-  if (!confirmar) {
-    return;
-  }
-
-  this.erro = '';
-  this.mensagem = '';
-
-  this.itemServicos.desativarProduto(item.iditem).subscribe({
-    next: (resposta) => {
-      this.mensagem =
-        resposta?.mensagem ?? 'Produto desativado com sucesso!';
-
-      this.listarItens();
-    },
-    error: (erro: any) => {
-      console.error('Erro ao desativar produto:', erro);
-
-      this.erro =
-        erro.error?.mensagem ?? 'Não foi possível desativar o produto.';
-    },
-  });
-}
-
 
   limparFormulario(): void {
     this.formulario = this.novoFormulario();

@@ -1,23 +1,33 @@
-
 <div class="carrinho-container">
-
   <h1>Meu Carrinho</h1>
+
+  <div class="navegacao-home">
+    <a routerLink="/home" class="botao-home"> ← Voltar para Home </a>
+  </div>
 
   <a routerLink="/catalogo">Continuar comprando</a>
 
-  <!-- Mensagens de sucesso e erro -->
-  <p *ngIf="mensagem" class="mensagem-sucesso">
+  <!-- Mensagem de sucesso -->
+  <div *ngIf="mensagem" class="mensagem-sucesso" role="status">
     {{ mensagem }}
-  </p>
+  </div>
 
-  <p *ngIf="erro" class="mensagem-erro">
+  <!-- Erro de estoque -->
+  <div *ngIf="erro && erroEstoque" class="alerta-estoque" role="alert">
+    <strong>⚠️ Estoque insuficiente</strong>
+    <p>{{ erro }}</p>
+    <small> Ajuste a quantidade do produto e tente novamente. </small>
+  </div>
+
+  <!-- Outros erros -->
+  <div *ngIf="erro && !erroEstoque" class="mensagem-erro" role="alert">
     {{ erro }}
-  </p>
+  </div>
+
+  <p *ngIf="carregandoEstoque" class="mensagem">Consultando estoque...</p>
 
   <div *ngIf="itens.length > 0; else carrinhoVazio">
-
     <div class="carrinho-item" *ngFor="let entrada of itens">
-
       <div class="item-info">
         <h2>{{ entrada.item.item1 }}</h2>
 
@@ -27,15 +37,38 @@
 
         <p>
           Preço unitário:
-          {{ entrada.item.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          {{ entrada.item.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
         </p>
+
+        <!-- Estoque somente para produtos -->
+        <ng-container *ngIf="entrada.item.tipoItem === 'P' && !carregandoEstoque">
+          <p class="estoque-disponivel" *ngIf="quantidadeDisponivel(entrada.item) > 0">
+            ✔ Disponível:
+            {{ quantidadeDisponivel(entrada.item) }}
+            unidade(s)
+          </p>
+
+          <p class="estoque-esgotado" *ngIf="quantidadeDisponivel(entrada.item) === 0">
+            ✖ Produto esgotado
+          </p>
+
+          <p
+            class="estoque-esgotado"
+            *ngIf="entrada.quantidade > quantidadeDisponivel(entrada.item)"
+          >
+            Quantidade no carrinho acima do estoque disponível.
+          </p>
+        </ng-container>
       </div>
 
+      <!-- Alterar quantidade -->
       <div class="quantidade">
         <button
           type="button"
           (click)="diminuir(entrada.item)"
-          [disabled]="finalizando">
+          [disabled]="finalizando"
+          aria-label="Diminuir quantidade"
+        >
           -
         </button>
 
@@ -44,7 +77,9 @@
         <button
           type="button"
           (click)="aumentar(entrada.item)"
-          [disabled]="finalizando">
+          [disabled]="finalizando || carregandoEstoque || limiteAtingido(entrada)"
+          aria-label="Aumentar quantidade"
+        >
           +
         </button>
       </div>
@@ -52,8 +87,7 @@
       <p class="subtotal">
         Subtotal:
         {{
-          entrada.item.preco * entrada.quantidade
-          | currency:'BRL':'symbol':'1.2-2':'pt-BR'
+          entrada.item.preco * entrada.quantidade | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
         }}
       </p>
 
@@ -61,28 +95,21 @@
         type="button"
         class="botao-remover"
         (click)="remover(entrada.item)"
-        [disabled]="finalizando">
+        [disabled]="finalizando"
+      >
         Remover
       </button>
-
     </div>
 
-    <!-- Total do carrinho -->
     <div class="total">
       <h2>
         Total:
-        {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        {{ total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
       </h2>
     </div>
 
-    <!-- Botões do carrinho -->
     <div class="acoes-carrinho">
-
-      <button
-        type="button"
-        class="botao-limpar"
-        (click)="limpar()"
-        [disabled]="finalizando">
+      <button type="button" class="botao-limpar" (click)="limpar()" [disabled]="finalizando">
         Limpar carrinho
       </button>
 
@@ -90,23 +117,15 @@
         type="button"
         class="botao-finalizar"
         (click)="finalizarCompra()"
-        [disabled]="finalizando || itens.length === 0">
-
+        [disabled]="finalizando || carregandoEstoque || itens.length === 0"
+      >
         {{ finalizando ? 'Finalizando...' : 'Finalizar compra' }}
-
       </button>
-
     </div>
-
   </div>
 
-  <!-- Carrinho vazio -->
   <ng-template #carrinhoVazio>
     <p>Seu carrinho está vazio.</p>
-
-    <a routerLink="/catalogo">
-      Ver produtos e serviços
-    </a>
+    <a routerLink="/catalogo">Ver produtos e serviços</a>
   </ng-template>
-
 </div>

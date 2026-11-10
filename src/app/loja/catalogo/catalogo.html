@@ -1,35 +1,43 @@
-
 <div class="catalogo-container">
-
   <header class="catalogo-header">
     <h1>Nossa Loja</h1>
-    <a routerLink="/catalogo">Continuar comprando</a>
 
+    <div class="navegacao-home">
 
+      <a routerLink="/home" class="botao-home">
+        ← Voltar para Home
+      </a>
+    
+      <a
+        routerLink="/carrinho"
+        class="icone-carrinho"
+        aria-label="Ver meu carrinho"
+      >
+        <span class="carrinho-simbolo">🛒</span>
+    
+        <span class="contador-carrinho">
+          {{ quantidadeCarrinho$ | async }}
+        </span>
+      </a>
+    
+    </div>
     <a routerLink="/carrinho">Ver meu carrinho</a>
 
-    <p *ngIf="mensagemCarrinho" class="mensagem">
+    <p *ngIf="mensagemCarrinho" class="mensagem" role="status">
       {{ mensagemCarrinho }}
     </p>
 
     <p>Conheça nossos produtos e serviços disponíveis.</p>
   </header>
 
-  <p *ngIf="carregando" class="mensagem">
-    Carregando catálogo...
-  </p>
+  <p *ngIf="carregando" class="mensagem">Carregando catálogo...</p>
 
-  <p *ngIf="erro" class="erro">
+  <p *ngIf="erro" class="erro" role="alert">
     {{ erro }}
   </p>
 
-  <div
-    class="grade-produtos"
-    *ngIf="!carregando && !erro && itens.length > 0"
-  >
-
+  <div class="grade-produtos" *ngIf="!carregando && !erro && itens.length > 0">
     <div class="card-item" *ngFor="let item of itens">
-
       <span class="tipo-item">
         {{ nomeTipo(item.tipoItem) }}
       </span>
@@ -41,25 +49,29 @@
       </p>
 
       <p class="preco">
-        {{ item.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        {{ item.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
       </p>
 
-      <button
-        type="button"
-        (click)="adicionarAoCarrinho(item)"
-      >
-        Adicionar ao carrinho
+      <!-- Estoque somente para produtos -->
+      <ng-container *ngIf="item.tipoItem === 'P'">
+        <p *ngIf="!produtoEsgotado(item)" class="estoque-disponivel">
+          ✔ {{ quantidadeDisponivel(item) }}
+          unidade(s) disponíveis
+        </p>
+
+        <p *ngIf="produtoEsgotado(item)" class="estoque-esgotado">✖ Produto esgotado</p>
+      </ng-container>
+
+      <!-- Serviços não possuem estoque -->
+      <p *ngIf="item.tipoItem === 'S'" class="servico-disponivel">Serviço disponível</p>
+
+      <button type="button" (click)="adicionarAoCarrinho(item)" [disabled]="produtoEsgotado(item)">
+        {{ produtoEsgotado(item) ? 'Indisponível' : 'Adicionar ao carrinho' }}
       </button>
-
     </div>
-
   </div>
 
-  <p
-    *ngIf="!carregando && !erro && itens.length === 0"
-    class="mensagem"
-  >
+  <p *ngIf="!carregando && !erro && itens.length === 0" class="mensagem">
     Nenhum produto ou serviço disponível no momento.
   </p>
-
 </div>

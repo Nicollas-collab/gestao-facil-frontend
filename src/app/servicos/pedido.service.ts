@@ -1,4 +1,3 @@
-
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,10 +23,9 @@ export interface PedidoResposta {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PedidoService {
-
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl = `${environment.apiUrl}/api/Pedido`;
@@ -40,20 +38,18 @@ export class PedidoService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-atualizarStatus(
-  idPedido: number,
-  statusPedido: string
-): Observable<{ mensagem: string; idpedido: number; statusPedido: string }> {
+  atualizarStatus(
+    idPedido: number,
+    statusPedido: string,
+  ): Observable<{ mensagem: string; idpedido: number; statusPedido: string }> {
+    return this.http.patch<{
+      mensagem: string;
+      idpedido: number;
+      statusPedido: string;
+    }>(`${this.apiUrl}/${idPedido}/status`, { statusPedido });
+  }
 
-  return this.http.patch<{
-    mensagem: string;
-    idpedido: number;
-    statusPedido: string;
-  }>(
-    `${this.apiUrl}/${idPedido}/status`,
-    { statusPedido }
-  );
-}
-
-
+  buscarPedidoPorId(idPedido: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${idPedido}`);
+  }
 }

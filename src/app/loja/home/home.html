@@ -1,1 +1,145 @@
-<p>home works!</p>
+<div class="home-container">
+  <!-- Banner principal -->
+  <section class="banner">
+    <div class="banner-conteudo">
+      <span class="subtitulo"> Bem-vindo à Estética & Bem-Estar </span>
+
+      <h1>
+        Sua beleza merece
+        <span>um cuidado especial.</span>
+      </h1>
+
+      <p>
+        Descubra nossos produtos e tratamentos estéticos, preparados para proporcionar beleza,
+        cuidado e bem-estar.
+      </p>
+
+      <div class="banner-botoes">
+        <a routerLink="/catalogo" class="botao-principal"> Explorar catálogo </a>
+
+        <a routerLink="/cadastro-cliente" class="botao-secundario"> Cadastre-se </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navegação -->
+  <section class="atalhos">
+    <a routerLink="/catalogo" class="atalho">
+      <span class="atalho-icone">🛍️</span>
+      <h3>Catálogo</h3>
+      <p>Explore nossos produtos e serviços</p>
+    </a>
+
+    <a routerLink="/carrinho" class="atalho">
+      <span class="atalho-icone">🛒</span>
+      <h3>Meu carrinho</h3>
+      <p>Confira seus itens selecionados</p>
+    </a>
+
+    <a routerLink="/meus-pedidos" class="atalho">
+      <span class="atalho-icone">📦</span>
+      <h3>Meus pedidos</h3>
+      <p>Acompanhe suas compras</p>
+    </a>
+  </section>
+
+  <!-- Mensagens -->
+  <p *ngIf="carregando" class="carregando">Carregando produtos e serviços...</p>
+
+  <p *ngIf="erro" class="mensagem-erro">
+    {{ erro }}
+  </p>
+
+  <!-- Produtos -->
+  <section class="secao-destaques">
+    <div class="secao-cabecalho">
+      <div>
+        <span class="secao-subtitulo">Cuidados especiais</span>
+        <h2>Produtos em destaque</h2>
+      </div>
+
+      <a routerLink="/catalogo" class="ver-todos"> Ver catálogo </a>
+    </div>
+
+    <div class="grade-itens">
+      <div class="item-card" *ngFor="let produto of produtos">
+        <div class="item-imagem">
+          <span>🧴</span>
+        </div>
+
+        <div class="item-conteudo">
+          <span class="tipo-item">Produto</span>
+
+          <h3>{{ produto.item1 }}</h3>
+
+          <p class="item-descricao">
+            {{ produto.descricaoItem }}
+          </p>
+
+          <div class="item-rodape">
+            <strong class="preco">
+              {{ produto.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </strong>
+
+            <a routerLink="/catalogo" class="botao-item"> Ver produto </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="!carregando && !erro && produtos.length === 0" class="sem-itens">
+      Nenhum produto disponível no momento.
+    </p>
+  </section>
+
+  <!-- Serviços -->
+  <section class="secao-destaques servicos-secao">
+    <div class="secao-cabecalho">
+      <div>
+        <span class="secao-subtitulo">Momentos de bem-estar</span>
+        <h2>Nossos serviços</h2>
+      </div>
+
+      <a routerLink="/catalogo" class="ver-todos"> Ver catálogo </a>
+    </div>
+
+    <div class="grade-itens">
+      <div class="item-card" *ngFor="let servico of servicos">
+        <div class="item-imagem servico-imagem">
+          <span>✨</span>
+        </div>
+
+        <div class="item-conteudo">
+          <span class="tipo-item">Serviço</span>
+
+          <h3>{{ servico.item1 }}</h3>
+
+          <p class="item-descricao">
+            {{ servico.descricaoItem }}
+          </p>
+
+          <div class="item-rodape">
+            <strong class="preco">
+              {{ servico.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </strong>
+
+            <a routerLink="/catalogo" class="botao-item"> Ver serviço </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="!carregando && !erro && servicos.length === 0" class="sem-itens">
+      Nenhum serviço disponível no momento.
+    </p>
+  </section>
+
+  <!-- Chamada final -->
+  <section class="chamada-final">
+    <h2>Seu momento de cuidado começa aqui.</h2>
+
+    <p>Conheça nossas opções de produtos e serviços e escolha o cuidado ideal para você.</p>
+
+    <a routerLink="/catalogo" class="botao-principal"> Conhecer todos os itens </a>
+  </section>
+</div>

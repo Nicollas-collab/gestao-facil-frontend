@@ -1,127 +1,80 @@
-
 <div class="meus-pedidos-container">
-
   <div class="cabecalho">
     <h1>Meus Pedidos</h1>
-
-    <a routerLink="/catalogo" class="botao-voltar">
-      Continuar comprando
-    </a>
+    <div class="navegacao-home">
+      <a routerLink="/home" class="botao-home"> ← Voltar para Home </a>
+    </div>
+    <a routerLink="/catalogo" class="botao-voltar"> Continuar comprando </a>
   </div>
-
-  <div style="background: #fff3cd; padding: 15px; margin: 15px 0;">
-  <p><strong>TESTE DE PEDIDOS</strong></p>
-  <p>ID do cliente: {{ idPessoa }}</p>
-  <p>Quantidade de pedidos: {{ pedidos.length }}</p>
-  <p>Carregando: {{ carregando }}</p>
-  <p>Erro: {{ erro }}</p>
-</div>
 
   <!-- Mensagem de erro -->
   <div *ngIf="erro" class="mensagem-erro">
     <p>{{ erro }}</p>
 
-    <a
-      *ngIf="idPessoa <= 0"
-      routerLink="/cadastro-cliente">
-      Realizar cadastro
-    </a>
+    <a *ngIf="idPessoa <= 0" routerLink="/cadastro-cliente"> Realizar cadastro </a>
   </div>
 
   <!-- Carregamento -->
-  <p *ngIf="carregando" class="carregando">
-    Carregando seus pedidos...
-  </p>
+  <p *ngIf="carregando" class="carregando">Carregando seus pedidos...</p>
 
   <!-- Nenhum pedido encontrado -->
-  <div
-    *ngIf="!carregando && !erro && pedidos.length === 0"
-    class="sem-pedidos">
-
+  <div *ngIf="!carregando && !erro && pedidos.length === 0" class="sem-pedidos">
     <h2>Nenhum pedido encontrado</h2>
 
-    <p>
-      Você ainda não realizou nenhuma compra.
-    </p>
+    <p>Você ainda não realizou nenhuma compra.</p>
 
-    <a routerLink="/catalogo">
-      Ver produtos e serviços
-    </a>
-
+    <a routerLink="/catalogo"> Ver produtos e serviços </a>
   </div>
 
   <!-- Lista de pedidos -->
-  <div
-    *ngIf="!carregando && pedidos.length > 0"
-    class="lista-pedidos">
-
-    <div
-      class="pedido-card"
-      *ngFor="let pedido of pedidos">
-
+  <div *ngIf="!carregando && pedidos.length > 0" class="lista-pedidos">
+    <div class="pedido-card" *ngFor="let pedido of pedidos">
       <div class="pedido-cabecalho">
-
         <h2>Pedido #{{ pedido.idpedido }}</h2>
 
         <span
           class="status"
           [ngClass]="{
-            'pendente': pedido.statusPedido === 'Pendente',
-            'andamento': pedido.statusPedido === 'Em andamento',
-            'concluido': pedido.statusPedido === 'Concluído',
-            'cancelado': pedido.statusPedido === 'Cancelado'
-          }">
-
+            pendente: pedido.statusPedido === 'Pendente',
+            andamento: pedido.statusPedido === 'Em andamento',
+            concluido: pedido.statusPedido === 'Concluído',
+            cancelado: pedido.statusPedido === 'Cancelado',
+          }"
+        >
           {{ pedido.statusPedido }}
-
         </span>
-
       </div>
 
       <p>
         <strong>Data:</strong>
-        {{ pedido.dataPedido | date:'dd/MM/yyyy HH:mm' }}
+        {{ pedido.dataPedido | date: 'dd/MM/yyyy HH:mm' }}
       </p>
 
       <div class="itens-pedido">
-
         <h3>Itens comprados</h3>
 
         <div *ngFor="let item of pedido.itens">
-
           <span>
             {{ item.nomeItem }}
           </span>
 
-          <span>
-            Quantidade: {{ item.quantidade }}
-          </span>
+          <span> Quantidade: {{ item.quantidade }} </span>
 
           <span>
-            {{ item.subtotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            {{ item.subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
           </span>
-
         </div>
-
       </div>
 
       <div class="pedido-rodape">
-
         <h3>
           Total:
-          {{ pedido.valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          {{ pedido.valorTotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
         </h3>
 
-        <a
-          [routerLink]="['/pedidos', pedido.idpedido]"
-          class="botao-detalhes">
-          Ver detalhes
-        </a>
-
+        <a [routerLink]="['/pedidos', pedido.idpedido]" class="botao-detalhes"> Ver detalhes </a>
       </div>
-
     </div>
-
   </div>
 
   <!-- Atualizar pedidos -->
@@ -130,11 +83,8 @@
     type="button"
     class="botao-atualizar"
     (click)="carregarPedidos()"
-    [disabled]="carregando">
-
+    [disabled]="carregando"
+  >
     {{ carregando ? 'Atualizando...' : 'Atualizar pedidos' }}
-
   </button>
-
 </div>
-
